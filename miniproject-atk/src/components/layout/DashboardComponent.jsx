@@ -1,5 +1,5 @@
 import React from 'react'
-import CRUDAlatTulisKerjaComponent from './CRUDAlatTulisKerjaComponent'
+import CRUDAlatTulisKerjaComponent from '../atks/CRUDAlatTulisKerjaComponent'
 import { useNavigate } from 'react-router-dom'
 
 function DashboardComponent() {
@@ -17,7 +17,7 @@ function DashboardComponent() {
       <ul className='navbar-nav bg-gradient-primary sidebar sidebar-dark accordion' id='accordionSidebar'>
 
         {/* side bar - brand */}
-        <a className='sidebar-brand d-flex align-items-center justify-content-center' href='index.html'>
+        <a className='sidebar-brand d-flex align-items-center justify-content-center' href=''>
           <div className='sidebar-brand-icon rotate-n-15'>
               <i className='fas fa-laugh-wink'></i>
           </div>
@@ -29,7 +29,7 @@ function DashboardComponent() {
 
         {/* nav item - dashboard */}
         <li className='nav-item active'>
-            <a className='nav-link' href='index.html'>
+            <a className='nav-link' href=''>
                 <i className='fas fa-fw fa-tachometer-alt'></i>
                 <span>Dashboard</span>
             </a>
@@ -51,6 +51,7 @@ function DashboardComponent() {
                 <div id='collapseTwo' className='collapse' aria-labelledby='headingTwo' data-parent='#accordionSidebar'>
                     <div className='bg-white py-2 collapse-inner rounded'>
                         <h6 className='collapse-header'>Custom Components:</h6>
+                        <a className='collapse-item' >Buttons</a>
                         <a className='collapse-item' onClick={crudATK}>Buttons</a>
                         <a className='collapse-item' href='cards.html'>Cards</a>
                     </div>
@@ -114,7 +115,7 @@ function DashboardComponent() {
             <li className='nav-item'>
                 <a className='nav-link' href='tables.html'>
                     <i className='fas fa-fw fa-table'></i>
-                    <span>Tables</span></a>
+                    <span>Tables</span></a>sidebar
             </li>
 
             {/* divider */}
