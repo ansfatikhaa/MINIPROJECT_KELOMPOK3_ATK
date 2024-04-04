@@ -6,6 +6,7 @@ import HeaderComponent from './components/layout/HeaderComponent';
 import FooterComponent from './components/layout/FooterComponent';
 import SidebarComponent from './components/layout/SidebarComponent';
 import ListAtkComponent from './components/atks/ListAtkComponent';
+import ChartComponent from './components/layout/ChartComponent';
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <div id='content'>
             <HeaderComponent />
             <Routes>
+            <Route path='/' element={ <ChartComponent />}></Route>
                <Route path='/atks' element={ <ListAtkComponent />}></Route>
             </Routes>
           </div>
