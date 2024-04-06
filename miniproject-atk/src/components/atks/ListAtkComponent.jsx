@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { listAtks, saveAtk, deleteAtk } from '../../service/AtkService';
+import { listAtks, saveAtk, updateAtk, getAtkById, deleteAtk } from '../../service/AtkService';
 import { useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -9,7 +9,15 @@ import swal from 'sweetalert';
 function ListAtkComponent() {
     const [atks, setAtks] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
-    const [atkData, setAtkData] = useState({
+    const [atkDataAdd, setAtkDataAdd] = useState({
+        nama: '',
+        harga: '',
+        stok: '',
+        sup: ''
+    });
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
+    const [atkDataUpdate, setAtkDataUpdate] = useState({
+        id: null,
         nama: '',
         harga: '',
         stok: '',
@@ -32,7 +40,7 @@ function ListAtkComponent() {
 
     const handleCloseAddModal = () => {
         setShowAddModal(false);
-        setAtkData({
+        setAtkDataAdd({
             nama: '',
             harga: '',
             stok: '',
@@ -41,7 +49,7 @@ function ListAtkComponent() {
     };
 
     const handleAddAtk = () => {
-        saveAtk(atkData)
+        saveAtk(atkDataAdd)
             .then(() => {
                 handleCloseAddModal();
                 listAtks()
@@ -63,12 +71,58 @@ function ListAtkComponent() {
             });
     };
 
-    const handleInputChange = (e) => {
+    const handleInputAddChange = (e) => {
         const { name, value } = e.target;
-        setAtkData({
-            ...atkData,
-            [name]: parseInt(value) || value, // Konversi ke tipe data yang sesuai
+        setAtkDataAdd({
+            ...atkDataAdd,
+            [name]: parseInt(value) || value,
         });
+    };
+
+    const handleShowUpdateModal = (atkId) => {
+        const atkToUpdate = atks.find(atk => atk.id === atkId);
+        setAtkDataUpdate({
+            id: atkToUpdate.id,
+            nama: atkToUpdate.nama,
+            harga: atkToUpdate.harga,
+            stok: atkToUpdate.stok,
+            sup: atkToUpdate.sup
+        });
+        setShowUpdateModal(true);
+    };
+
+    const handleCloseUpdateModal = () => {
+        setShowUpdateModal(false);
+        setAtkDataUpdate({
+            id: null,
+            nama: '',
+            harga: '',
+            stok: '',
+            sup: ''
+        });
+    };
+
+    const handleUpdateAtk = () => {
+        updateAtk(atkDataUpdate, atkDataUpdate.id)
+            .then(() => {
+                handleCloseUpdateModal();
+                listAtks()
+                    .then(response => {
+                        setAtks(response.data.data);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+                swal("Data ATK berhasil diperbarui.", {
+                    icon: "success",
+                });
+            })
+            .catch(error => {
+                console.error(error);
+                swal("Gagal memperbarui data ATK.", {
+                    icon: "error",
+                });
+            });
     };
 
     const confirmDelete = (atkId) => {
@@ -160,8 +214,8 @@ function ListAtkComponent() {
                             <Form.Control
                                 type="text"
                                 name="nama"
-                                value={atkData.nama}
-                                onChange={handleInputChange}
+                                value={atkDataAdd.nama}
+                                onChange={handleInputAddChange}
                                 autoFocus
                             />
                         </Form.Group>
@@ -170,8 +224,8 @@ function ListAtkComponent() {
                             <Form.Control
                                 type="number"
                                 name="harga"
-                                value={atkData.harga}
-                                onChange={handleInputChange}
+                                value={atkDataAdd.harga}
+                                onChange={handleInputAddChange}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="stok">
@@ -179,8 +233,8 @@ function ListAtkComponent() {
                             <Form.Control
                                 type="number"
                                 name="stok"
-                                value={atkData.stok}
-                                onChange={handleInputChange}
+                                value={atkDataAdd.stok}
+                                onChange={handleInputAddChange}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="sup">
@@ -188,8 +242,8 @@ function ListAtkComponent() {
                             <Form.Control
                                 type="text"
                                 name="sup"
-                                value={atkData.sup}
-                                onChange={handleInputChange}
+                                value={atkDataAdd.sup}
+                                onChange={handleInputAddChange}
                             />
                         </Form.Group>
                     </Form>
@@ -197,6 +251,57 @@ function ListAtkComponent() {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseAddModal}>Tutup</Button>
                     <Button variant="primary" onClick={handleAddAtk}>Simpan</Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showUpdateModal} onHide={handleCloseUpdateModal}>
+                <Modal.Header>
+                    <Modal.Title>Ubah ATK</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="nama">
+                            <Form.Label>Nama ATK</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="nama"
+                                value={atkDataUpdate.nama}
+                                onChange={(e) => setAtkDataUpdate({ ...atkDataUpdate, nama: e.target.value })}
+                                autoFocus
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="harga">
+                            <Form.Label>Harga</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="harga"
+                                value={atkDataUpdate.harga}
+                                onChange={(e) => setAtkDataUpdate({ ...atkDataUpdate, harga: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="stok">
+                            <Form.Label>Stok</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="stok"
+                                value={atkDataUpdate.stok}
+                                onChange={(e) => setAtkDataUpdate({ ...atkDataUpdate, stok: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="sup">
+                            <Form.Label>Supplier</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="sup"
+                                value={atkDataUpdate.sup}
+                                onChange={(e) => setAtkDataUpdate({ ...atkDataUpdate, sup: e.target.value })}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseUpdateModal}>Tutup</Button>
+                    <Button variant="primary" onClick={handleUpdateAtk}>Simpan Perubahan</Button>
                 </Modal.Footer>
             </Modal>
         </>
