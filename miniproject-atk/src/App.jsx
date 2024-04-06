@@ -13,6 +13,7 @@ function App() {
   const [count, setCount] = useState(0);
 
   return (
+    <>
     <BrowserRouter>
       <div id='wrapper'>
         <SidebarComponent />
@@ -22,14 +23,13 @@ function App() {
             <Routes>
             <Route path='/' element={ <ChartComponent />}></Route>
                <Route path='/atks' element={ <ListAtkComponent />}></Route>
-               <Route path='/save-atks/' element={ <ListAtkComponent />}></Route>
-            
             </Routes>
           </div>
           <FooterComponent />
         </div>
       </div>
     </BrowserRouter>
+    </>
   );
 }
 
