@@ -163,7 +163,7 @@ function ListAtkComponent() {
     return (
         <>
             <div className="container-fluid">
-                <h1 className="h3 mb-2 text-gray-800">Alat Tulis Kerja</h1>
+                <h1 className="h3 mb-2 text-gray-800">Alat Tulis Kantor</h1>
                 <button className='btn btn-primary m-2' onClick={handleShowAddModal}>Tambah Atk</button>
                 <div className="card shadow mb-4">
                     <div className="card-header py-3">
