@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { listAtks } from '../../service/AtkService';
+import { listAtks,updateAtk } from '../../service/AtkService';
 import { listPenjualans, savePenjualan, getPenjualanById } from '../../service/TransaksiPenjualanService';
 import { listDetailPenjualans, listDetailPenjualanActive, saveDetailPenjualan } from '../../service/DetailPenjualanService';
 import Form from 'react-bootstrap/Form';
@@ -105,6 +105,8 @@ function TransaksiPenjualan() {
         setChange(changeAmount >= 0 ? changeAmount : 0);
     };
 
+ 
+
     const saveTransaction = () => {
         const today = new Date().toISOString().split('T')[0]; 
         const transaksiPenjualan = {
@@ -113,17 +115,45 @@ function TransaksiPenjualan() {
             kryId: 3, // disesuaiin login
             detailPenjualanList: selectedItems.map(item => ({ atkId: item.id, jumlah: item.quantity }))
         };
-        
+    
         if (parseFloat(payment) < totalPrice) {
             swal("Jumlah pembayaran kurang.", { icon: "error" });
             return; 
         }
     
+        
         savePenjualan(transaksiPenjualan)
             .then(response => {
                 swal("Transaksi berhasil disimpan.", { icon: "success" });
-                setSelectedItems([]);
-                setPayment('');
+    
+             
+                Promise.all(selectedItems.map(item => {
+                    const updatedStock = item.stok - (cartQuantityMap[item.id] || 0);
+                   
+                    return updateAtk({ ...item, stok: updatedStock }, item.id);
+                }))
+                .then(() => {
+                    console.log("Stok item berhasil diperbarui.");
+    
+                    
+                    listAtks()
+                        .then(response => {
+                            setAtks(response.data.data);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+    
+                   
+                    setSelectedItems([]);
+                    setCartQuantityMap({});
+                    setPayment('');
+                    setChange(0);
+                })
+                .catch(error => {
+                    console.error("Gagal memperbarui stok item.", error);
+                    swal("Terjadi kesalahan saat menyimpan transaksi.", { icon: "error" });
+                });
             })
             .catch(error => {
                 console.error(error);
@@ -131,8 +161,6 @@ function TransaksiPenjualan() {
             });
     };
     
-    
-
     return (
         <div className="container-fluid">
             <h1 className="h3 mb-2 text-gray-800">Transaksi Penjualan</h1>
