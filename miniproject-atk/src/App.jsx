@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DashboardComponent from './components/layout/DashboardComponent';
-import CRUDAlatTulisKerjaComponent from './components/atks/CRUDAlatTulisKerjaComponent';
+
 import HeaderComponent from './components/layout/HeaderComponent';
 import FooterComponent from './components/layout/FooterComponent';
 import SidebarComponent from './components/layout/SidebarComponent';

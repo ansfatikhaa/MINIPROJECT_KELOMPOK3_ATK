@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { listAtks } from '../../service/AtkService';
-import { listPenjualans,savePenjualan,getPenjualanById } from '../../service/TransaksiPenjualanService';
-import { listDetailPenjualans,listDetailPenjualanActive,saveDetailPenjualan } from '../../service/DetailPenjualanService';
+import { listPenjualans, savePenjualan, getPenjualanById } from '../../service/TransaksiPenjualanService';
+import { listDetailPenjualans, listDetailPenjualanActive, saveDetailPenjualan } from '../../service/DetailPenjualanService';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
@@ -14,10 +14,8 @@ function TransaksiPenjualan() {
     const [quantityMap, setQuantityMap] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
     const [cartQuantityMap, setCartQuantityMap] = useState({});
-    
     const [change, setChange] = useState(0);
     const [payment, setPayment] = useState('');
-
 
     useEffect(() => {
         listAtks()
@@ -47,7 +45,7 @@ function TransaksiPenjualan() {
             const newItem = { ...item, quantity: newQuantity };
             setSelectedItems([...selectedItems, newItem]);
         }
-        updateTotalPrice(); 
+        updateTotalPrice();
         swal("Item ditambahkan ke keranjang.", { icon: "success" });
     };
 
@@ -58,14 +56,38 @@ function TransaksiPenjualan() {
         updateTotalPrice();
     };
 
+    const handleItemQuantityChange = (itemId, changeAmount) => {
+        const newQuantity = (cartQuantityMap[itemId] || 0) + changeAmount;
+        if (newQuantity < 1) return;
+        
+        const updatedCart = { ...cartQuantityMap, [itemId]: newQuantity };
+        setCartQuantityMap(updatedCart);
+        
+ 
+        const updatedItems = selectedItems.map(item => {
+            if (item.id === itemId) {
+                return { ...item, quantity: newQuantity };
+            }
+            return item;
+        });
+        setSelectedItems(updatedItems);
+    
+        updateTotalPrice();
+    };
+    
+
     const updateTotalPrice = () => {
         let total = 0;
         selectedItems.forEach(item => {
-            total += item.harga * (item.quantity || 1); 
+            total += item.harga * (cartQuantityMap[item.id] || 0);
         });
         setTotalPrice(total);
     };
-    
+
+    useEffect(() => {
+        calculateChange();
+    }, [payment, totalPrice]);
+
     const removeItemFromCart = (itemId) => {
         const updatedCart = { ...cartQuantityMap };
         delete updatedCart[itemId];
@@ -78,45 +100,38 @@ function TransaksiPenjualan() {
 
     const calculateChange = () => {
         const paymentAmount = parseFloat(payment);
-        if (isNaN(paymentAmount)) return; // Do nothing if payment is not a valid number
+        if (isNaN(paymentAmount)) return; 
         const changeAmount = paymentAmount - totalPrice;
         setChange(changeAmount >= 0 ? changeAmount : 0);
     };
-    
 
     const saveTransaction = () => {
-        const today = new Date().toISOString().split('T')[0]; // Mengambil tanggal hari ini
+        const today = new Date().toISOString().split('T')[0]; 
         const transaksiPenjualan = {
             tanggal: today,
             total: totalPrice,
-            kryId: 3, // Sesuaikan dengan kebutuhan aplikasi Anda
+            kryId: 3, // disesuaiin login
             detailPenjualanList: selectedItems.map(item => ({ atkId: item.id, jumlah: item.quantity }))
         };
-
-        // Panggil fungsi savePenjualan dari TrPenjualanService
+        
+        if (parseFloat(payment) < totalPrice) {
+            swal("Jumlah pembayaran kurang.", { icon: "error" });
+            return; 
+        }
+    
         savePenjualan(transaksiPenjualan)
             .then(response => {
                 swal("Transaksi berhasil disimpan.", { icon: "success" });
+                setSelectedItems([]);
+                setPayment('');
             })
             .catch(error => {
                 console.error(error);
                 swal("Terjadi kesalahan saat menyimpan transaksi.", { icon: "error" });
             });
     };
-
-    const handleItemQuantityChange = (itemId, changeAmount) => {
-      
-        const newQuantity = (cartQuantityMap[itemId] || 0) + changeAmount;
-        if (newQuantity < 1) return;
-        const updatedCart = { ...cartQuantityMap, [itemId]: newQuantity };
-        setCartQuantityMap(updatedCart);
-        updateTotalPrice(); 
-    };
     
-
-    useEffect(() => {
-        calculateChange();
-    }, [payment, totalPrice]);
+    
 
     return (
         <div className="container-fluid">
@@ -163,8 +178,6 @@ function TransaksiPenjualan() {
                                         />
                                         <Button variant="outline-primary" size="sm" onClick={() => handleQuantityChange(item.id, (quantityMap[item.id] || 1) + 1)}>+</Button>
                                     </td>
-
-
                                     <td>
                                         <Button variant="primary" onClick={() => addItemToCart(item)}>Tambah ke Keranjang</Button>
                                     </td>
@@ -204,13 +217,12 @@ function TransaksiPenjualan() {
                                         <span className="mx-2">{cartQuantityMap[item.id]}</span>
                                         <Button variant="outline-primary" size="sm" onClick={() => handleItemQuantityChange(item.id, 1)}>+</Button>
                                     </td>
-                                    <td>Rp {item.harga * (cartQuantityMap[item.id] || 1)},00</td>
+                                    <td>Rp {item.harga * (cartQuantityMap[item.id] || 0)},00</td>
                                     <td>
                                         <Button variant="danger" onClick={() => removeItemFromCart(item.id)}>Hapus</Button>
                                     </td>
                                 </tr>
                             ))}
-
                             <tr>
                                 <td colSpan="5">Total</td>
                                 <td colSpan="2">Rp {totalPrice},00</td>
@@ -222,7 +234,7 @@ function TransaksiPenjualan() {
                                         type="number"
                                         min="0"
                                         value={payment}
-                                        onChange={(e) => setPayment(parseInt(e.target.value))}
+                                        onChange={(e) => setPayment(e.target.value)}
                                     />
                                 </td>
                             </tr>

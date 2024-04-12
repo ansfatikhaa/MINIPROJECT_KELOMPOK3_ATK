@@ -1,5 +1,5 @@
 import React from 'react'
-import CRUDAlatTulisKerjaComponent from '../atks/CRUDAlatTulisKerjaComponent'
+
 import { useNavigate } from 'react-router-dom'
 
 function DashboardComponent() {
