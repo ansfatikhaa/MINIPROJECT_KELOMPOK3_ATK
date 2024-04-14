@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { listAtks,updateAtk } from '../../service/AtkService';
 import { listPenjualans, savePenjualan, getPenjualanById } from '../../service/TransaksiPenjualanService';
-import { listDetailPenjualans, listDetailPenjualanActive, saveDetailPenjualan } from '../../service/DetailPenjualanService';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
@@ -189,10 +188,10 @@ function TransaksiPenjualan() {
                             </tr>
                         </thead>
                         <tbody>
-                            {atks.filter(item => item.nama.toLowerCase().includes(searchTerm.toLowerCase())).map(item => (
+                        {atks.filter(item => item.nama.toLowerCase().includes(searchTerm.toLowerCase()) && item.status === 1).map(item => (
                                 <tr key={item.id}>
                                     <td>{item.nama}</td>
-                                    <td>Rp {item.harga},00</td>
+                                    <td>Rp {item.harga.toLocaleString('id-ID')},00</td>
                                     <td>{item.stok}</td>
                                     <td>{item.sup}</td>
                                     <td className="d-flex align-items-center">
@@ -237,7 +236,7 @@ function TransaksiPenjualan() {
                             {selectedItems.map(item => (
                                 <tr key={item.id}>
                                     <td>{item.nama}</td>
-                                    <td>Rp {item.harga},00</td>
+                                    <td>Rp {item.harga.toLocaleString('id-ID')},00</td>
                                     <td>{item.stok}</td>
                                     <td>{item.sup}</td>
                                     <td>
@@ -245,7 +244,7 @@ function TransaksiPenjualan() {
                                         <span className="mx-2">{cartQuantityMap[item.id]}</span>
                                         <Button variant="outline-primary" size="sm" onClick={() => handleItemQuantityChange(item.id, 1)}>+</Button>
                                     </td>
-                                    <td>Rp {item.harga * (cartQuantityMap[item.id] || 0)},00</td>
+                                    <td>Rp {(item.harga * (cartQuantityMap[item.id] || 0)).toLocaleString('id-ID')},00</td>
                                     <td>
                                         <Button variant="danger" onClick={() => removeItemFromCart(item.id)}>Hapus</Button>
                                     </td>
@@ -253,7 +252,7 @@ function TransaksiPenjualan() {
                             ))}
                             <tr>
                                 <td colSpan="5">Total</td>
-                                <td colSpan="2">Rp {totalPrice},00</td>
+                                <td colSpan="2">Rp {totalPrice.toLocaleString('id-ID')},00</td>
                             </tr>
                             <tr>
                                 <td colSpan="5">Jumlah Pembayaran</td>
@@ -268,7 +267,7 @@ function TransaksiPenjualan() {
                             </tr>
                             <tr>
                                 <td colSpan="5">Kembalian</td>
-                                <td colSpan="2">Rp {change},00</td>
+                                <td colSpan="2">Rp {change.toLocaleString('id-ID')},00</td>
                             </tr>
                             <tr>
                                 <td colSpan="7">

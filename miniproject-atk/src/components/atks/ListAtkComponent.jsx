@@ -186,7 +186,7 @@ function ListAtkComponent() {
                                     {atks.map(atk => (
                                         <tr key={atk.id}>
                                             <td>{atk.nama}</td>
-                                            <td>Rp {atk.harga},00</td>
+                                            <td>Rp {atk.harga.toLocaleString('id-ID')},00</td>
                                             <td>{atk.stok}</td>
                                             <td>{atk.sup}</td>
                                             <td>{atk.status === 1 ? 'Aktif' : 'Tidak Aktif'}</td>
