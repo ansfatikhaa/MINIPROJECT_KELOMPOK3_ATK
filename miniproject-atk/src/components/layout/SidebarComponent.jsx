@@ -43,7 +43,7 @@ const SidebarComponent = () => {
                         <div className='bg-white py-2 collapse-inner rounded'>
                             <h6 className='collapse-header'>Master :</h6>
                             <Link className='collapse-item' to='/atks'>ATK</Link>
-                            <Link className='collapse-item' to='/karyawan'>Karyawan</Link>
+                            <Link className='collapse-item' to='/karyawans'>Karyawan</Link>
                         </div>
                     </div>
                 </li>

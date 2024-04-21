@@ -4,6 +4,7 @@ import HeaderComponent from './components/layout/HeaderComponent';
 import FooterComponent from './components/layout/FooterComponent';
 import SidebarComponent from './components/layout/SidebarComponent';
 import ListAtkComponent from './components/atks/ListAtkComponent';
+import ListKaryawanComponent from './components/karyawans/ListKaryawanComponent';
 import ListPenjualanComponenet from './components/penjualans/ListPenjualanComponent';
 import ChartComponent from './components/layout/ChartComponent';
 import './App.css';
@@ -23,6 +24,7 @@ function App() {
             <Routes>
             <Route path='/' element={ <ChartComponent />}></Route>
                <Route path='/atks' element={ <ListAtkComponent />}></Route>
+               <Route path='/karyawans' element={ <ListKaryawanComponent />}></Route>
                <Route path='/riwayat-penjualan' element={ <ListPenjualanComponenet />}></Route>
                <Route path='/transaksi' element={ <TransaksiPenjualan />}></Route>
             </Routes>
