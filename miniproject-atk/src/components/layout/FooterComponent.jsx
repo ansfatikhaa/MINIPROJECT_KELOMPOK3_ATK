@@ -1,8 +1,9 @@
 import React from 'react';
 
-const FooterComponent = () => {
+const FooterComponent = ({ isLoggedIn }) => {
     return(
         <div>
+            {isLoggedIn && (
             <footer className="sticky-footer bg-white">
                 <div className="container my-auto">
                     <div className="copyright text-center my-auto">
@@ -10,6 +11,7 @@ const FooterComponent = () => {
                     </div>
                 </div>
             </footer>
+            )}
         </div>
     );
 }

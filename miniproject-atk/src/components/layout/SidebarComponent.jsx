@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const SidebarComponent = () => {
+const SidebarComponent = ({ isLoggedIn }) => {
     return (
         <div>
+            
             {/* side bar */}
+            {isLoggedIn && (
             <ul className='navbar-nav bg-gradient-primary sidebar sidebar-dark accordion' id='accordionSidebar'>
 
                 {/* side bar - brand */}
@@ -43,7 +45,7 @@ const SidebarComponent = () => {
                         <div className='bg-white py-2 collapse-inner rounded'>
                             <h6 className='collapse-header'>Master :</h6>
                             <Link className='collapse-item' to='/atks'>ATK</Link>
-                            <Link className='collapse-item' to='/karyawans'>Karyawan</Link>
+                            <Link className='collapse-item' to='/karyawan'>Karyawan</Link>
                         </div>
                     </div>
                 </li>
@@ -63,14 +65,13 @@ const SidebarComponent = () => {
                     </Link>
                 </li>
 
-              {/* nav item - tables */}
+                {/* nav item - tables */}
                 <li className='nav-item'>
                     <Link className='nav-link' to='/riwayat-penjualan'>
                         <i className='fas fa-fw fa-table'></i>
                         <span>Riwayat Penjualan</span>
                     </Link>
                 </li>
-
 
                 {/* divider */}
                 <hr className='sidebar-divider d-none d-md-block'></hr>
@@ -84,10 +85,11 @@ const SidebarComponent = () => {
                 <div className='sidebar-card d-none d-lg-flex'>
                     <img className='sidebar-card-illustration mb-2' src='img/undraw_rocket.svg' alt='...' />
                     <p className='text-center mb-2'><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                    <Link className='btn btn-success btn-sm' href='https://startbootstrap.com/theme/sb-admin-pro'>Upgrade to Pro!</Link>
+                    <a className='btn btn-success btn-sm' href='https://startbootstrap.com/theme/sb-admin-pro'>Upgrade to Pro!</a>
                 </div>
 
             </ul>
+            )}            
             {/* end of sidebar */}
 
         </div>

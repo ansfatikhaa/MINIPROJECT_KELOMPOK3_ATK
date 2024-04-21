@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const HeaderComponent = () => {
+const HeaderComponent = ({ isLoggedIn }) => {
     return (
         <div>
+            {isLoggedIn && (
             <header>
                 {/* content wrapper */}
                 <div id='content-wrapper' className='d-flex flex-column'>
@@ -71,6 +72,7 @@ const HeaderComponent = () => {
                     </div>
                 </div>
             </header>
+            )}
         </div>
     );
 }

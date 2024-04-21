@@ -7,13 +7,19 @@ import Button from 'react-bootstrap/Button';
 import swal from 'sweetalert';
 
 function ListAtkComponent() {
+    const userDataString = localStorage.getItem('userData');
+
+    // Parse the JSON string to convert it back to an object
+    const userData = JSON.parse(userDataString);
+
     const [atks, setAtks] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [atkDataAdd, setAtkDataAdd] = useState({
         nama: '',
         harga: '',
         stok: '',
-        sup: ''
+        sup: '',
+        creaby: userData.id
     });
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [atkDataUpdate, setAtkDataUpdate] = useState({
@@ -44,7 +50,8 @@ function ListAtkComponent() {
             nama: '',
             harga: '',
             stok: '',
-            sup: ''
+            sup: '',
+            creaby: userData.id
         });
     };
 
@@ -86,7 +93,8 @@ function ListAtkComponent() {
             nama: atkToUpdate.nama,
             harga: atkToUpdate.harga,
             stok: atkToUpdate.stok,
-            sup: atkToUpdate.sup
+            sup: atkToUpdate.sup,
+            modiby: userData.id
         });
         setShowUpdateModal(true);
     };
@@ -98,7 +106,8 @@ function ListAtkComponent() {
             nama: '',
             harga: '',
             stok: '',
-            sup: ''
+            sup: '',
+            modiby: userData.id
         });
     };
 

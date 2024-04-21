@@ -7,6 +7,11 @@ import { deleteKaryawan, listKaryawan, saveKaryawan, updateKaryawan } from '../.
 
 function ListKaryawanComponent() {
 
+    const userDataString = localStorage.getItem('userData');
+
+    // Parse the JSON string to convert it back to an object
+    const userData = JSON.parse(userDataString);
+
     const handleShowAddModal = () => setShowAddModal(true);
     const [karyawans, setKaryawan] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -27,7 +32,8 @@ function ListKaryawanComponent() {
         setKaryawanDataAdd({
             nama: '',
             email: '',
-            noTlp: ''
+            noTlp: '',
+            creaby: userData.id
         });
     };
 
@@ -43,13 +49,15 @@ function ListKaryawanComponent() {
         id: null,
         nama: '',
         email: '',
-        noTlp: ''
+        noTlp: '',
+        creaby: userData.id
     });
 
     const [karyawanDataAdd, setKaryawanDataAdd] = useState({
         nama: '',
         email: '',
-        noTlp: ''
+        noTlp: '',
+        creaby: userData.id
     });
 
 
@@ -60,7 +68,8 @@ function ListKaryawanComponent() {
             nama: '',
             email: '',
             noTlp: '',
-            status: ''
+            status: '',
+            creaby: userData.id
         });
     };
 
@@ -117,7 +126,8 @@ function ListKaryawanComponent() {
             nama: karyawanToUpdate.nama,
             email: karyawanToUpdate.email,
             noTlp: karyawanToUpdate.noTlp,
-            status: karyawanToUpdate.status
+            status: karyawanToUpdate.status,
+            modiby: userData.id
         });
         setShowUpdateModal(true);
     };
