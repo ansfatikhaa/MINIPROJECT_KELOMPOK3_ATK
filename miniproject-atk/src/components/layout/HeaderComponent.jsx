@@ -2,6 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const HeaderComponent = ({ isLoggedIn }) => {
+        // Ambil data pengguna dari localStorage
+        const userDataString = localStorage.getItem('userData');
+        // Parse data JSON ke dalam objek userData
+        const userData = JSON.parse(userDataString);
     return (
         <div>
             {isLoggedIn && (
@@ -35,12 +39,14 @@ const HeaderComponent = ({ isLoggedIn }) => {
 
                             {/* topbar navbar */}
                             <ul className='navbar-nav ml-auto'>
+                            
 
                                 {/* nav item - user information */}
                                 <li className='nav-item dropdown no-arrow'>
                                     <a className='nav-link dropdown-toggle' href='#' id='userDropdown' role='button'
                                         data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                                        <span className='mr-2 d-none d-lg-inline text-gray-600 small'>Douglas McGee</span>
+                                            
+                                        <span className='mr-2 d-none d-lg-inline text-gray-600 small'>{userData.nama}</span>
                                         <img className='img-profile rounded-circle'
                                             src='img/undraw_profile.svg' alt='Profile'/>
                                     </a>

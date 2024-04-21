@@ -7,6 +7,12 @@ import Button from 'react-bootstrap/Button';
 import swal from 'sweetalert';
 
 function TransaksiPenjualan() {
+
+    const userDataString = localStorage.getItem('userData');
+
+    // Parse the JSON string to convert it back to an object
+    const userData = JSON.parse(userDataString);
+
     const [atks, setAtks] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedItems, setSelectedItems] = useState([]);
@@ -111,7 +117,7 @@ function TransaksiPenjualan() {
         const transaksiPenjualan = {
             tanggal: today,
             total: totalPrice,
-            kryId: 3, // disesuaiin login
+            kryId: userData.id,
             detailPenjualanList: selectedItems.map(item => ({ atkId: item.id, jumlah: item.quantity }))
         };
     
