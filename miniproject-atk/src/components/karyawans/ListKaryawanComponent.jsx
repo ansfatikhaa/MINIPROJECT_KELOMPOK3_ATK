@@ -42,7 +42,7 @@ function ListKaryawanComponent() {
         const newValue = /^\d+$/.test(value) ? value : parseInt(value) || value;
         setKaryawanDataAdd({
             ...karyawanDataAdd,
-            [name]: parseInt(value) || value,
+            [name]: newValue,
         });
     };
 
