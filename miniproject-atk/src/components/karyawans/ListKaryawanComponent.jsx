@@ -39,6 +39,7 @@ function ListKaryawanComponent() {
 
     const handleInputAddChange = (e) => {
         const { name, value } = e.target;
+        const newValue = /^\d+$/.test(value) ? value : parseInt(value) || value;
         setKaryawanDataAdd({
             ...karyawanDataAdd,
             [name]: parseInt(value) || value,
